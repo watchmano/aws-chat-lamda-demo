@@ -1,0 +1,151 @@
+{
+  "/Users/jeong-yeonghag/Desktop/Projects/Company/chatapp-demo-aws-lamda": {
+    "versionSfCore": null,
+    "versionFramework": "4.1.19",
+    "isWithinCompose": false,
+    "isCompose": false,
+    "composeOrgName": null,
+    "composeResolverProviders": {
+      "aws": {
+        "instance": {
+          "credentials": "<REDACTED>",
+          "serviceConfigFile": {
+            "functions": {
+              "chatAuthHandler": {
+                "handler": "chat-auth.chatAuthHandler",
+                "events": [
+                  {
+                    "http": {
+                      "path": "auth",
+                      "method": "post",
+                      "cors": true
+                    }
+                  }
+                ]
+              },
+              "chatEventHandler": {
+                "handler": "chat-event.chatEventHandler",
+                "events": [
+                  {
+                    "http": {
+                      "path": "event",
+                      "method": "post",
+                      "cors": true
+                    }
+                  }
+                ]
+              },
+              "chatListHandler": {
+                "handler": "chat-list.chatListHandler",
+                "events": [
+                  {
+                    "http": {
+                      "path": "list",
+                      "method": "get",
+                      "cors": true
+                    }
+                  }
+                ]
+              }
+            },
+            "provider": {
+              "name": "aws",
+              "stage": "dev"
+            }
+          },
+          "configFileDirPath": "/Users/jeong-yeonghag/Desktop/Projects/Company/chatapp-demo-aws-lamda",
+          "config": {
+            "type": "aws"
+          },
+          "options": {},
+          "stage": "dev",
+          "dashboard": null,
+          "isDefaultConfig": true
+        },
+        "resolvers": {}
+      }
+    },
+    "composeServiceName": null,
+    "servicePath": "/Users/jeong-yeonghag/Desktop/Projects/Company/chatapp-demo-aws-lamda",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "functions": {
+        "chatAuthHandler": {
+          "handler": "chat-auth.chatAuthHandler",
+          "events": [
+            {
+              "http": {
+                "path": "auth",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "chatEventHandler": {
+          "handler": "chat-event.chatEventHandler",
+          "events": [
+            {
+              "http": {
+                "path": "event",
+                "method": "post",
+                "cors": true
+              }
+            }
+          ]
+        },
+        "chatListHandler": {
+          "handler": "chat-list.chatListHandler",
+          "events": [
+            {
+              "http": {
+                "path": "list",
+                "method": "get",
+                "cors": true
+              }
+            }
+          ]
+        }
+      },
+      "provider": {
+        "name": "aws",
+        "stage": "dev"
+      }
+    },
+    "serviceRawFile": "functions:\n  chatAuthHandler:\n    handler: chat-auth.chatAuthHandler\n    events:\n      - http:\n          path: auth\n          method: post\n          cors: true\n  chatEventHandler:\n    handler: chat-event.chatEventHandler\n    events:\n      - http:\n          path: event\n          method: post\n          cors: true\n  chatListHandler:\n    handler: chat-list.chatListHandler\n    events:\n      - http:\n          path: list\n          method: get\n          cors: true\n",
+    "command": [
+      "offline"
+    ],
+    "options": {},
+    "error": {
+      "message": "\"service\" property is missing in serverless.yml",
+      "stack": "ServerlessError2: \"service\" property is missing in serverless.yml\n    at Service.loadServiceFileParam (file:///Users/jeong-yeonghag/.serverless/releases/4.1.19/package/dist/sf-core.js:855:9430)\n    at Service.load (file:///Users/jeong-yeonghag/.serverless/releases/4.1.19/package/dist/sf-core.js:855:6963)\n    at Serverless.init (file:///Users/jeong-yeonghag/.serverless/releases/4.1.19/package/dist/sf-core.js:861:9726)\n    at runFramework (file:///Users/jeong-yeonghag/.serverless/releases/4.1.19/package/dist/sf-core.js:909:897)\n    at async route (file:///Users/jeong-yeonghag/.serverless/releases/4.1.19/package/dist/sf-core.js:920:16304)\n    at async Object.run2 [as run] (file:///Users/jeong-yeonghag/.serverless/releases/4.1.19/package/dist/sf-core.js:920:16702)\n    at async run3 (file:///Users/jeong-yeonghag/.serverless/releases/4.1.19/package/dist/sf-core.js:920:17962)",
+      "code": "SERVICE_NAME_MISSING"
+    },
+    "params": {},
+    "machineId": "388688260d2ef4b1396ee71a86a53309",
+    "accessKeyV2": "<REDACTED>",
+    "accessKeyV1": "<REDACTED>",
+    "orgId": "54384109-71fc-4e75-9816-11dd7cffa7b9",
+    "orgName": "amazonchatappdemo",
+    "userId": "JRhqnTZrD2QXtnyfFX",
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "userName": "amazonchatappdemo",
+    "subscription": null,
+    "userEmail": "watchmano@naver.com",
+    "versionSf": "4.1.19",
+    "serviceProviderAwsCfStackId": null,
+    "serviceProviderAwsCfStackCreated": null,
+    "serviceProviderAwsCfStackUpdated": null,
+    "serviceProviderAwsCfStackStatus": null,
+    "serviceProviderAwsCfStackOutputs": null
+  }
+}

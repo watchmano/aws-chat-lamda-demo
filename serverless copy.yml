@@ -1,0 +1,60 @@
+service: my-service
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-west-2 # Adjust this to your region if necessary
+
+functions:
+  auth:
+    handler: index.authHandler
+    events:
+      - http:
+          path: auth
+          method: post
+          cors: true
+
+  event:
+    handler: index.eventHandler
+    events:
+      - http:
+          path: event
+          method: post
+          cors: true
+
+  msg-list:
+    handler: index.chatMsgListHandler
+    events:
+      - http:
+          path: msg/list
+          method: get
+          cors: true
+
+  room-list:
+    handler: index.chatRoomListHandler
+    events:
+      - http:
+          path: room/list
+          method: get
+          cors: true
+
+plugins:
+  - serverless-offline
+
+# Optional: Add custom settings for serverless-offline plugin
+custom:
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 3002
+    stage: ${self:provider.stage}
+    region: ${self:provider.region}
+    cors:
+      origins: "*"
+      headers:
+        - Content-Type
+        - X-Amz-Date
+        - Authorization
+        - X-Api-Key
+        - X-Amz-Security-Token
+      allowCredentials: false

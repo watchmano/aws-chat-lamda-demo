@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IVS Chat Test Page</title>
+  <script>
+    async function sendListRequest() {
+      const response = await fetch('http://localhost:3000/dev/room/list?action=listRooms', {
+        method: 'GET'
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        const roomList = result.rooms.map(room => `<option value="${room.arn}">${room.name}</option>`).join('');
+        document.getElementById('room-selector').innerHTML = roomList;
+        document.getElementById('selected-room').textContent = "No room selected"; // Reset selected room display
+        document.getElementById('auth-room-identifier').value = ""; // Clear previous room ARN
+      } else {
+        const error = await response.text();
+        document.getElementById('list-response').textContent = `Error: ${error}`;
+      }
+    }
+
+    function setRoom() {
+      const roomArn = document.getElementById('room-selector').value;
+      const roomName = document.getElementById('room-selector').options[document.getElementById('room-selector').selectedIndex].text;
+      document.getElementById('selected-room').textContent = `Selected Room: ${roomName}`;
+      document.getElementById('auth-room-identifier').value = roomArn;
+    }
+
+    function generateRandomUserId() {
+      const userId = 'user_' + Math.random().toString(36).substring(7);
+      document.getElementById('auth-user-id').value = userId;
+    }
+
+    async function sendAuthRequest(event) {
+      event.preventDefault();
+      const roomArn = document.getElementById('auth-room-identifier').value;
+      const userId = document.getElementById('auth-user-id').value;
+
+      const response = await fetch('http://localhost:3000/dev/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ arn: roomArn, userId })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        document.getElementById('auth-response').textContent = JSON.stringify(result, null, 2);
+      } else {
+        const error = await response.text();
+        document.getElementById('auth-response').textContent = `Error: ${error}`;
+      }
+    }
+
+    async function sendEventRequest(event) {
+      event.preventDefault();
+      const roomArn = document.getElementById('auth-room-identifier').value;
+      const eventName = document.getElementById('event-name').value;
+      const eventAttributes = {
+        userId: document.getElementById('auth-user-id').value,
+        message: document.getElementById('event-message').value || undefined,
+        photoUrl: document.getElementById('event-photo-url').value || undefined
+      };
+
+      const response = await fetch('http://localhost:3000/dev/event', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ arn: roomArn, eventName, eventAttributes })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        document.getElementById('event-response').textContent = JSON.stringify(result, null, 2);
+      } else {
+        const error = await response.text();
+        document.getElementById('event-response').textContent = `Error: ${error}`;
+      }
+    }
+
+    async function fetchRoomMessages() {
+      const roomArn = document.getElementById('auth-room-identifier').value;
+      const response = await fetch('http://localhost:3000/dev/msg/list', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ roomArn })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        document.getElementById('messages-response').textContent = JSON.stringify(result, null, 2);
+      } else {
+        const error = await response.text();
+        document.getElementById('messages-response').textContent = `Error: ${error}`;
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>IVS Chat Test Page</h1>
+
+  <section>
+    <h2>List Rooms</h2>
+    <button onclick="sendListRequest()">Load Rooms</button>
+    <select id="room-selector" onchange="setRoom()">
+      <option value="">Select Room</option>
+    </select>
+    <p id="selected-room">No room selected</p>
+    <pre id="list-response"></pre>
+  </section>
+
+  <section>
+    <h2>Auth Request</h2>
+    <form onsubmit="sendAuthRequest(event)">
+      <label for="auth-room-identifier">Room ARN:</label>
+      <input type="text" id="auth-room-identifier" name="roomIdentifier" readonly required><br><br>
+
+      <label for="auth-user-id">User ID:</label>
+      <input type="text" id="auth-user-id" name="userId" required>
+      <button type="button" onclick="generateRandomUserId()">Generate User ID</button><br><br>
+
+      <button type="submit">Send Auth Request</button>
+    </form>
+    <pre id="auth-response"></pre>
+  </section>
+
+  <section>
+    <h2>Event Request</h2>
+    <form onsubmit="sendEventRequest(event)">
+      <label for="event-name">Event Name:</label>
+      <select id="event-name" name="eventName" required>
+        <option value="userJoined">User Joined</option>
+        <option value="userSentMessage">User Sent a Message</option>
+        <option value="userLeft">User Left</option>
+        <option value="userSharePhoto">User Share Photo</option>
+      </select><br><br>
+
+      <label for="event-message">Message (Optional):</label>
+      <input type="text" id="event-message" name="eventMessage"><br><br>
+
+      <label for="event-photo-url">Photo URL (Optional):</label>
+      <input type="text" id="event-photo-url" name="photoUrl"><br><br>
+
+      <button type="submit">Send Event Request</button>
+    </form>
+    <pre id="event-response"></pre>
+  </section>
+
+  <section>
+    <h2>Room Messages</h2>
+    <button onclick="fetchRoomMessages()">Load Room Messages</button>
+    <pre id="messages-response"></pre>
+  </section>
+
+</body>
+</html>
